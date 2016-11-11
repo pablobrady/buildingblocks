@@ -59,44 +59,45 @@ describe('Listing cities on /cities', function() {
 	});
 
 	it('Returns initial cities', function(done) {
-
 		request(app)
 			.get('/cities')
-			.expect(JSON.stringify(['Lotopia', 'Caspiana', 'Indigo']), done);
+			.expect('{"Lotopia":"Some description","Caspiana":"Another description","Indigo":"Last description"}',
+					done);
 	});
 
 });
 
-// describe('Creating new cities', function(){
-//
-//   it('Returns a 201 status code', function(done){
-//
-//     request(app)
-//       .post('/cities')
-//       .send('name=Springfield&description=where+the+simpsons+live')
-//       .expect(201, done);
-//   });
-//
-//   it('Return the city name', function(done) {
-//
-//     request(app)
-//       .post('/cities')
-//       .send('name=Springfield&description=where+the+simpsons+live')
-//       .expect(/springfield/i, done);
-//
-//   });
-//
-//   it('Validates city name and description', function(done) {
-//
-//     request(app)
-//       .post('/cities')
-//       .send('name=&description=')
-//       .expect(400, done);
-//
-//   });
-// });
-//
-//
+describe('Creating new cities', function(){
+
+  it('Returns a 201 status code', function(done){
+
+    request(app)
+      .post('/cities')
+      .send('name=Springfield&description=where+the+simpsons+live')
+      .expect(201, done);
+			// Still fails ????
+  });
+
+  it('Return the city name', function(done) {
+
+    request(app)
+      .post('/cities')
+      .send('name=Springfield&description=where+the+simpsons+live')
+      .expect(/springfield/i, done);
+
+  });
+
+  // it('Validates city name and description', function(done) {
+	//
+  //   request(app)
+  //     .post('/cities')
+  //     .send('name=&description=')
+  //     .expect(400, done);
+	//
+  // });
+});
+
+
 // describe('Deleting cities', function(){
 //
 //   before(function(){
