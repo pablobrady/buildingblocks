@@ -117,11 +117,6 @@
       "from": "ipaddr.js@1.1.1",
       "resolved": "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-1.1.1.tgz"
     },
-    "jsesc": {
-      "version": "2.2.0",
-      "from": "jsesc@latest",
-      "resolved": "https://registry.npmjs.org/jsesc/-/jsesc-2.2.0.tgz"
-    },
     "media-typer": {
       "version": "0.3.0",
       "from": "media-typer@0.3.0",

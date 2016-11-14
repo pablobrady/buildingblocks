@@ -17,6 +17,7 @@ $(function(){
       $('.alert').show();
     })
     .success(function(cityName){
+console.log('FORM CITYNAME: ', cityName );
       appendToList([cityName]);
       form.trigger('reset');
     });
@@ -27,6 +28,7 @@ $(function(){
     var content, city;
     for(var i in cities){
       city = cities[i];
+console.log("CITY1: ", city);
       content = '<a href="/cities/'+city+'">'+city+'</a>'+ // + // example on how to serve static images
         ' <a href="#" data-city="'+city+'">'+
         '<img src="delete.png" width="15px"></a>';

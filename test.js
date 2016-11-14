@@ -1,10 +1,10 @@
 var request = require('supertest');
 var app = require('./app');
 
-// var redis = require('redis');
-// var client = redis.createClient();
-// client.select('test'.length);
-// client.flushdb();
+var redis = require('redis');
+var client = redis.createClient();
+client.select('test'.length); // aka '4'
+client.flushdb();
 
 describe('Requests to the root path', function() {
 
@@ -61,8 +61,7 @@ describe('Listing cities on /cities', function() {
 	it('Returns initial cities', function(done) {
 		request(app)
 			.get('/cities')
-			.expect('{"Lotopia":"Some description","Caspiana":"Another description","Indigo":"Last description"}',
-					done);
+			.expect(JSON.stringify([]), done);
 	});
 
 });
