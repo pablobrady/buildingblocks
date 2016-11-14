@@ -13,12 +13,14 @@ if (process.env.REDISTOGO_URL) {
 	var rtg    = require('url').parse(process.env.REDISTOGO_URL);
 	var client = redis.createClient(rtg.port, rtg.hostname);
 	client.auth( rtg.auth.split(":", [1]) );
+	client.select( 'production'.length ); // Pick database id#
 
 } else {
 	var client = redis.createClient(); // See www.npm.org/package/redis/
+	client.select( 'development'.length ); // Pick database id#
+
 }
 
-client.select( (process.env.NODE_ENV || 'development').length ); // Pick database id#
 	// "Development", or 11 length
 	// "Production",  or 10 "
 	// "Test",        or 4  "
