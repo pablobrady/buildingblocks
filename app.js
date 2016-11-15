@@ -13,11 +13,11 @@ if (process.env.REDISTOGO_URL) {
 	var rtg    = require('url').parse(process.env.REDISTOGO_URL);
 	var client = redis.createClient(rtg.port, rtg.hostname);
 	client.auth( rtg.auth.split(":")[1] );
-	client.select( 'production'.length ); // Pick database id#
+	client.select( 0 );
 
 } else {
 	var client = redis.createClient(); // See www.npm.org/package/redis/
-	client.select( 'development'.length ); // Pick database id#
+	client.select( 0 ); // Pick database id# (but only '0' on free version; (process.env.NODE_ENV || 'development').length)
 
 }
 
@@ -26,9 +26,8 @@ if (process.env.REDISTOGO_URL) {
 	// "Test",        or 4  "
 // End Redis Connection
 
-// app.get('/', function(request, response) {
-// 	response.send('OK'); // HTML format
-// }); // Alt to using STATIC
+
+
 
 app.get('/cities', function(request, response) {
 	client.hkeys('cities', function(error, names) {
@@ -43,11 +42,28 @@ app.post('/cities', urlEncoded, function(request, response) {
 	client.hset('cities', newCity.name, newCity.description, function(error) {
 		if(error) throw error;
 
+		if( !newCity.name || !newCity.description ) {
+			response.sendStatus(400);
+			console.log("SENDING STATUS 400!");
+			return false;
+
+		}
+
 		response.status(201).send(newCity.name);
 		console.log("SENDING STATUS 201!");
 
-
 	});
 });
+
+app.delete('/cities/:name', urlEncoded, function(request, response) {
+console.log("DELETE:  ", request.params.name);
+	client.hdel('cities', request.params.name, function(error) {
+		if(error) throw error;
+
+		response.sendStatus('204');
+	});
+});
+
+
 
 module.exports = app;

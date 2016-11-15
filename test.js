@@ -61,7 +61,7 @@ describe('Listing cities on /cities', function() {
 	it('Returns initial cities', function(done) {
 		request(app)
 			.get('/cities')
-			.expect(JSON.stringify([]), done);
+			.expect(JSON.stringify(['Springfield']), done);
 	});
 
 });
@@ -74,7 +74,7 @@ describe('Creating new cities', function(){
       .post('/cities')
       .send('name=Springfield&description=where+the+simpsons+live')
       .expect(201, done);
-			// Still fails ????
+
   });
 
   it('Return the city name', function(done) {
@@ -86,37 +86,38 @@ describe('Creating new cities', function(){
 
   });
 
-  // it('Validates city name and description', function(done) {
-	//
-  //   request(app)
-  //     .post('/cities')
-  //     .send('name=&description=')
-  //     .expect(400, done);
-	//
-  // });
+  it('Validates city name and description', function(done) {
+
+    request(app)
+      .post('/cities')
+      .send('name=&description=')
+      .expect(400, done);
+
+  });
 });
 
 
-// describe('Deleting cities', function(){
-//
-//   before(function(){
-//     client.hset('cities', 'Banana', 'a tasty fruit');
-//   });
-//
-//   after(function() {
-//     client.flushdb();
-//   });
-//
-//
-//   it('Returns a 204 status code', function(done){
-//
-//     request(app)
-//       .delete('/cities/Banana')
-//       .expect(204, done);
-//   });
-// });
-//
-//
+describe('Deleting cities', function(){
+
+  before(function(){
+    client.hset('cities', 'Banana', 'a tasty fruit');
+  });
+
+  after(function() {
+    client.flushdb();
+  });
+
+
+  it('Returns a 204 status code', function(done){
+
+    request(app)
+      .delete('/cities/Banana')
+      .expect(204, done); //  For longer form, add:  .end(...) { done(); }
+
+  });
+});
+
+
 // describe('Shows city info', function(){
 //
 //   before(function() {
