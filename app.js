@@ -13,14 +13,13 @@ if (process.env.REDISTOGO_URL) {
 	var rtg    = require('url').parse(process.env.REDISTOGO_URL);
 	var client = redis.createClient(rtg.port, rtg.hostname);
 	client.auth( rtg.auth.split(":")[1] );
-	client.select( 0 );
+	client.select( 0 );  // Heroku/RedisToGo free -- only 0 available
 
 } else {
 	var client = redis.createClient(); // See www.npm.org/package/redis/
 	client.select( 0 ); // Pick database id# (but only '0' on free version; (process.env.NODE_ENV || 'development').length)
 
 }
-
 	// "Development", or 11 length
 	// "Production",  or 10 "
 	// "Test",        or 4  "
@@ -36,6 +35,23 @@ app.get('/cities', function(request, response) {
 		response.json(names);
 	})
 });
+
+app.get('/cities/:name', function(request, response) {
+	client.hget('cities', request.params.name, function(error, description) {
+		if(error) throw error;
+
+		response.render('show.ejs',
+			{
+				city: {
+					name: request.params.name,
+					description: description
+				}
+			});
+
+	})
+});
+
+
 
 app.post('/cities', urlEncoded, function(request, response) {
 	var newCity = request.body;
